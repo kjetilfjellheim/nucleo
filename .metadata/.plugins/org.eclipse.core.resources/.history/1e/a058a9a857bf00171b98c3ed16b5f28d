@@ -1,0 +1,20 @@
+/*
+ * defines.h
+ *
+ *  Created on: 1 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef DEFINES_H_
+#define DEFINES_H_
+
+//Select custom I2C
+#define SSD1306_I2C              I2C3
+#define SSD1306_I2C_PINSPACK     TM_I2C_PinsPack_1
+//Select custom I2C address
+#define SSD1306_I2C_ADDR         0x78
+//Select custom width and height if your LCD differs in size
+#define SSD1306_WIDTH            128
+#define SSD1306_HEIGHT           64
+
+#endif /* DEFINES_H_ */

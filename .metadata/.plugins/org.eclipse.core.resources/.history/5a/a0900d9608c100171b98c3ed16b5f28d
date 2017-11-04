@@ -1,0 +1,266 @@
+#include "main.h"
+#include "stm32l4xx_hal.h"
+#include <string.h>
+
+#define SSD1306_WIDTH 128
+#define SSD1306_HEIGHT 64
+
+I2C_HandleTypeDef oledI2c;
+
+UART_HandleTypeDef huart2;
+
+static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+
+char CHARACTER_L[] = {0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x00};
+
+
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_USART2_UART_Init(void);
+static void MX_I2C3_Init(void);
+void OLED_Init();
+void sendOledCommand(uint8_t regAddr, uint8_t pData);
+void OLED_Write_Display();
+void Empty_Screen();
+void Fill_Screen();
+void Write_CharacterL(int pos);
+
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+	MX_GPIO_Init();
+	MX_USART2_UART_Init();
+	MX_I2C3_Init();
+	OLED_Init();
+	while (1) {
+		Empty_Screen();
+		Write_CharacterL(0);
+		Write_CharacterL(1);
+		Write_CharacterL(3);
+		Write_CharacterL(4);
+		OLED_Write_Display();
+	}
+
+}
+
+void SystemClock_Config(void) {
+
+	RCC_OscInitTypeDef RCC_OscInitStruct;
+	RCC_ClkInitTypeDef RCC_ClkInitStruct;
+	RCC_PeriphCLKInitTypeDef PeriphClkInit;
+
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
+	RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+	RCC_OscInitStruct.MSICalibrationValue = 0;
+	RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_6;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
+	RCC_OscInitStruct.PLL.PLLN = 16;
+	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+	RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+	RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2
+			| RCC_PERIPHCLK_I2C3;
+	PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+	PeriphClkInit.I2c3ClockSelection = RCC_I2C3CLKSOURCE_PCLK1;
+	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1)
+			!= HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
+	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+static void MX_I2C3_Init(void) {
+	oledI2c.Instance = I2C3;
+	oledI2c.Init.Timing = 0x8000BEFC;
+	oledI2c.Init.OwnAddress1 = 0;
+	oledI2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	oledI2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	oledI2c.Init.OwnAddress2 = 0;
+	oledI2c.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+	oledI2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	oledI2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	if (HAL_I2C_Init(&oledI2c) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	if (HAL_I2CEx_ConfigAnalogFilter(&oledI2c, I2C_ANALOGFILTER_ENABLE)
+			!= HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	if (HAL_I2CEx_ConfigDigitalFilter(&oledI2c, 0) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+	HAL_I2C_Init(&oledI2c);
+
+}
+
+static void MX_USART2_UART_Init(void) {
+
+	huart2.Instance = USART2;
+	huart2.Init.BaudRate = 115200;
+	huart2.Init.WordLength = UART_WORDLENGTH_7B;
+	huart2.Init.StopBits = UART_STOPBITS_1;
+	huart2.Init.Parity = UART_PARITY_NONE;
+	huart2.Init.Mode = UART_MODE_TX_RX;
+	huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+	huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+	huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+	if (HAL_UART_Init(&huart2) != HAL_OK) {
+		_Error_Handler(__FILE__, __LINE__);
+	}
+
+}
+
+static void MX_GPIO_Init(void) {
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+	__HAL_RCC_GPIOC_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOB_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOH_CLK_ENABLE()
+	;
+
+	GPIO_InitStruct.Pin = GPIO_PIN_14 | GPIO_PIN_15;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5
+			| GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11
+			| GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_5
+			| GPIO_PIN_6 | GPIO_PIN_7;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = GPIO_PIN_3;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+}
+
+void OLED_Init() {
+
+	HAL_Delay(100);
+	sendOledCommand(0x00, 0xAE); //Display off
+	sendOledCommand(0x00, 0x20); //Set Memory Addressing Mode
+	sendOledCommand(0x00, 0x00); //00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+	sendOledCommand(0x00, 0xB0); //Set Page Start Address for Page Addressing Mode,0-7
+	sendOledCommand(0x00, 0xC8); //Set COM Output Scan Direction
+	sendOledCommand(0x00, 0x00); //---set low column address
+	sendOledCommand(0x00, 0x10); //---set high column address
+	sendOledCommand(0x00, 0x40); //--set start line address
+	sendOledCommand(0x00, 0x81); //--set contrast control register
+	sendOledCommand(0x00, 0xFF);
+	sendOledCommand(0x00, 0xA1); //--set segment re-map 0 to 127
+	sendOledCommand(0x00, 0xA6); //--set normal display
+	sendOledCommand(0x00, 0xA8); //--set multiplex ratio(1 to 64)
+	sendOledCommand(0x00, 0x3F); //
+	sendOledCommand(0x00, 0xA4); //0xa4,Output follows RAM content;0xa5,Output ignores RAM content
+	sendOledCommand(0x00, 0xD3); //-set display offset
+	sendOledCommand(0x00, 0x00); //-not offset
+	sendOledCommand(0x00, 0xD5); //--set display clock divide ratio/oscillator frequency
+	sendOledCommand(0x00, 0xF0); //--set divide ratio
+	sendOledCommand(0x00, 0xD9); //--set pre-charge period
+	sendOledCommand(0x00, 0x22); //
+	sendOledCommand(0x00, 0xDA); //--set com pins hardware configuration
+	sendOledCommand(0x00, 0x12);
+	sendOledCommand(0x00, 0xDB); //--set vcomh
+	sendOledCommand(0x00, 0x20); //0x20,0.77xVcc
+	sendOledCommand(0x00, 0x8D); //--set DC-DC enable
+	sendOledCommand(0x00, 0x14); //
+	sendOledCommand(0x00, 0xAF); //--turn on SSD1306 panel
+}
+
+void OLED_Write_Display() {
+	for (uint8_t m = 0; m < 8; m++) {
+		sendOledCommand(0x00, 0xB0 + m); //Set Page Start Address for Page Addressing Mode,0-7
+		sendOledCommand(0x00, 0x00); //---set low column address
+		sendOledCommand(0x00, 0x10); //---set high column address
+
+		HAL_I2C_Mem_Write(&oledI2c, 0x3C << 1, 0x40, I2C_MEMADD_SIZE_8BIT,
+				&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH, 1000);
+	}
+}
+
+void sendOledCommand(uint8_t regAddr, uint8_t pData) {
+	uint8_t cmd[2] = { regAddr, pData };
+	HAL_I2C_Master_Transmit(&oledI2c, 0x3C << 1, cmd, 2, 100);
+}
+
+void _Error_Handler(char * file, int line) {
+	while (1) {
+	}
+}
+
+void Empty_Screen() {
+	memset(SSD1306_Buffer, 0x00, sizeof(SSD1306_Buffer));
+}
+
+void Fill_Screen() {
+	memset(SSD1306_Buffer, 0xFF, sizeof(SSD1306_Buffer));
+}
+
+void Write_CharacterL(int pos) {
+	SSD1306_Buffer[0 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[0];
+	SSD1306_Buffer[1 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[1];
+	SSD1306_Buffer[2 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[2];
+	SSD1306_Buffer[3 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[3];
+	SSD1306_Buffer[4 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[4];
+	SSD1306_Buffer[5 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[5];
+	SSD1306_Buffer[6 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[6];
+	SSD1306_Buffer[7 + (SSD1306_WIDTH * (pos * 2))] = CHARACTER_L[7];
+	SSD1306_Buffer[0 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[8];
+	SSD1306_Buffer[1 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[9];
+	SSD1306_Buffer[2 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[10];
+	SSD1306_Buffer[3 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[11];
+	SSD1306_Buffer[4 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[12];
+	SSD1306_Buffer[5 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[13];
+	SSD1306_Buffer[6 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[14];
+	SSD1306_Buffer[7 + (SSD1306_WIDTH * ((pos * 2) +1))] = CHARACTER_L[15];
+}
+
+#ifdef USE_FULL_ASSERT
+
+void assert_failed(uint8_t* file, uint32_t line)
+{
+
+}
+
+#endif
