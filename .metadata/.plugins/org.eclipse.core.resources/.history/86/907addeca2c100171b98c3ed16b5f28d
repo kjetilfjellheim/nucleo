@@ -1,0 +1,25 @@
+/*
+ * ssd1360.h
+ *
+ *  Created on: 4 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "stm32l4xx_hal.h"
+
+#ifndef SSD1360_H_
+#define SSD1360_H_
+
+struct {
+	int width;
+	int height;
+	I2C_HandleTypeDef oledI2c;
+} SSD1360_d;
+
+void OLED_Init(SSD1360_d ssd1360_d);
+void sendOledCommand(uint8_t regAddr, uint8_t pData);
+void OLED_Write_Display();
+void Empty_Screen();
+void Fill_Screen();
+
+#endif /* SSD1360_H_ */

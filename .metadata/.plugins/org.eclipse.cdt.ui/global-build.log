@@ -1,4 +1,4 @@
-21:06:07 **** Incremental Build of configuration Debug for project GPSOledProject ****
+15:15:17 **** Incremental Build of configuration Debug for project GPSOledProject ****
 make all 
 Building file: ../Src/main.c
 Invoking: MCU GCC Compiler
@@ -16,5 +16,5 @@ Generating binary and Printing size information:
 arm-none-eabi-objcopy -O binary "GPSOledProject.elf" "GPSOledProject.bin"
 arm-none-eabi-size "GPSOledProject.elf"
    text	   data	    bss	    dec	    hex	filename
-  10688	    320	   2792	  13800	   35e8	GPSOledProject.elf
+  14280	    416	   1784	  16480	   4060	GPSOledProject.elf
  

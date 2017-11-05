@@ -1,0 +1,126 @@
+/*
+ * ssd1360.c
+ *
+ *  Created on: 4 Nov 2017
+ *      Author: Kjetil
+ */
+
+#define SSD1306_WIDTH 128
+#define SSD1306_HEIGHT 64
+
+#include <string.h>
+#include <stdlib.h>
+
+
+#include "ssd1360.h"
+
+char CHARACTER_A[] = { 0x00, 0x7C, 0x12, 0x12, 0x7C, 0x00 };
+char CHARACTER_B[] = { 0x00, 0x7E, 0x4A, 0x4A, 0x3C, 0x00 };
+char CHARACTER_C[] = { 0x00, 0x3C, 0x42, 0x42, 0x42, 0x00 };
+char CHARACTER_D[] = { 0x00, 0x7E, 0x42, 0x42, 0x3C, 0x00 };
+char CHARACTER_E[] = { 0x00, 0x7E, 0x4A, 0x4A, 0x42, 0x00 };
+char CHARACTER_F[] = { 0x00, 0x7E, 0x0A, 0x0A, 0x0A, 0x00 };
+char CHARACTER_G[] = { 0x00, 0x3C, 0x4A, 0x4A, 0x30, 0x00 };
+char CHARACTER_H[] = { 0x00, 0x7E, 0x10, 0x10, 0x7E, 0x00 };
+char CHARACTER_I[] = { 0x00, 0x00, 0x7A, 0x00, 0x00, 0x00 };
+char CHARACTER_J[] = { 0x00, 0x22, 0x42, 0x42, 0x7E, 0x00 };
+char CHARACTER_K[] = { 0x00, 0x7E, 0x18, 0x24, 0x42, 0x00 };
+char CHARACTER_L[] = { 0x00, 0x7E, 0x40, 0x40, 0x40, 0x00 };
+char CHARACTER_M[] = { 0x00, 0x7E, 0x0C, 0x0C, 0x7E, 0x00 };
+char CHARACTER_N[] = { 0x00, 0x7E, 0x0C, 0x30, 0x7E, 0x00 };
+char CHARACTER_O[] = { 0x00, 0x3C, 0x42, 0x42, 0x3C, 0x00 };
+char CHARACTER_P[] = { 0x00, 0x7E, 0x0A, 0x0A, 0x0E, 0x00 };
+char CHARACTER_Q[] = { 0x00, 0x3C, 0x42, 0x62, 0x7C, 0x00 };
+char CHARACTER_R[] = { 0x00, 0x7E, 0x1A, 0x2A, 0x4E, 0x00 };
+char CHARACTER_S[] = { 0x00, 0x4E, 0x4A, 0x4A, 0x7A, 0x00 };
+char CHARACTER_T[] = { 0x00, 0x02, 0x7E, 0x02, 0x02, 0x00 };
+char CHARACTER_U[] = { 0x00, 0x7E, 0x40, 0x40, 0x7E, 0x00 };
+char CHARACTER_V[] = { 0x00, 0x1E, 0x60, 0x60, 0x1E, 0x00 };
+char CHARACTER_W[] = { 0x00, 0x7E, 0x30, 0x38, 0x7E, 0x00 };
+char CHARACTER_X[] = { 0x00, 0x42, 0x3C, 0x3C, 0x42, 0x00 };
+char CHARACTER_Y[] = { 0x00, 0x06, 0x08, 0x78, 0x06, 0x00 };
+char CHARACTER_Z[] = { 0x00, 0x62, 0x52, 0x4A, 0x46, 0x00 };
+char CHARACTER_0[] = { 0x00, 0x7E, 0x42, 0x42, 0x7E, 0x00 };
+char CHARACTER_1[] = { 0x00, 0x00, 0x44, 0x7E, 0x40, 0x00 };
+char CHARACTER_2[] = { 0x00, 0x44, 0x62, 0x52, 0x4C, 0x00 };
+char CHARACTER_3[] = { 0x00, 0x4A, 0x4A, 0x4A, 0x7E, 0x00 };
+char CHARACTER_4[] = { 0x00, 0x0E, 0x08, 0x08, 0x7E, 0x00 };
+char CHARACTER_5[] = { 0x00, 0x4E, 0x4A, 0x4A, 0x7A, 0x00 };
+char CHARACTER_6[] = { 0x00, 0x3C, 0x4A, 0x4A, 0x72, 0x00 };
+char CHARACTER_7[] = { 0x00, 0x02, 0x02, 0x72, 0x0E, 0x00 };
+char CHARACTER_8[] = { 0x00, 0x7E, 0x4A, 0x4A, 0x7E, 0x00 };
+char CHARACTER_9[] = { 0x00, 0x0E, 0x0A, 0x0A, 0x7E, 0x00 };
+char CHARACTER_COMMA[] = { 0x00, 0x00, 0x60, 0x60, 0x00, 0x00 };
+
+void sendOledCommand(I2C_HandleTypeDef oledI2c, uint8_t addr, uint8_t regAddr, uint8_t pData) {
+	uint8_t cmd[2] = { regAddr, pData };
+	HAL_I2C_Master_Transmit(&oledI2c, addr << 1, cmd, 2, 100);
+}
+
+struct SSD1360_d Init(int width, int height, I2C_HandleTypeDef oledI2c, uint8_t addr) {
+	struct SSD1360_d ssd1360_d;
+	ssd1360_d.width = width;
+	ssd1360_d.height = height;
+	ssd1360_d.oledI2c = oledI2c;
+	ssd1360_d.addr = addr;
+	ssd1360_d.buffer = malloc(width * height / 8);
+	return ssd1360_d;
+}
+
+void OLED_Init(struct SSD1360_d ssd1360_d) {
+	HAL_Delay(100);
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xAE); //Display off
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x20); //Set Memory Addressing Mode
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x00); //00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xB0); //Set Page Start Address for Page Addressing Mode,0-7
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xC8); //Set COM Output Scan Direction
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x00); //---set low column address
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x10); //---set high column address
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x40); //--set start line address
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x81); //--set contrast control register
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xFF);
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xA1); //--set segment re-map 0 to 127
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xA6); //--set normal display
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xA8); //--set multiplex ratio(1 to 64)
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x3F); //
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xA4); //0xa4,Output follows RAM content;0xa5,Output ignores RAM content
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xD3); //-set display offset
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x00); //-not offset
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xD5); //--set display clock divide ratio/oscillator frequency
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xF0); //--set divide ratio
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xD9); //--set pre-charge period
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x22); //
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xDA); //--set com pins hardware configuration
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x12);
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xDB); //--set vcomh
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x20); //0x20,0.77xVcc
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x8D); //--set DC-DC enable
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x14); //
+	sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xAF); //--turn on SSD1306 panel
+}
+
+void OLED_Write_Display(struct SSD1360_d ssd1360_d) {
+	for (uint8_t m = 0; m < 8; m++) {
+		sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0xB0 + m); //Set Page Start Address for Page Addressing Mode,0-7
+		sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x00); //---set low column address
+		sendOledCommand(ssd1360_d.oledI2c, ssd1360_d.addr, 0x00, 0x10); //---set high column address
+
+		HAL_I2C_Mem_Write(&oledI2c, 0x3C << 1, 0x40, I2C_MEMADD_SIZE_8BIT,
+				&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH, 1000);
+	}
+}
+
+
+void Empty_Screen(struct SSD1360_d ssd1360_d) {
+	memset(SSD1306_Buffer, 0x00, sizeof(SSD1306_Buffer));
+}
+
+void Fill_Screen(struct SSD1360_d ssd1360_d) {
+	memset(SSD1306_Buffer, 0xFF, sizeof(SSD1306_Buffer));
+}
+
+
+void _Error_Handler(char * file, int line) {
+	while (1) {
+	}
+}

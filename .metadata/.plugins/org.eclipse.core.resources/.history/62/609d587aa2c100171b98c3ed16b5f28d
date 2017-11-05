@@ -1,0 +1,17 @@
+/*
+ * ssd1360.h
+ *
+ *  Created on: 4 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef SSD1360_H_
+#define SSD1360_H_
+
+struct {
+	int width;
+	int height;
+	I2C_HandleTypeDef oledI2c;
+} SSD1360_d;
+
+#endif /* SSD1360_H_ */

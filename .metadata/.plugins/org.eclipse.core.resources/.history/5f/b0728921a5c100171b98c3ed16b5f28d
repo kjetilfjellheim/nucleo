@@ -1,0 +1,32 @@
+/*
+ * ssd1360.h
+ *
+ *  Created on: 4 Nov 2017
+ *      Author: Kjetil
+ */
+#include <string.h>
+
+#include "stm32l4xx_hal.h"
+
+#ifndef SSD1360_H_
+#define SSD1360_H_
+
+struct {
+	int width;
+	int height;
+	I2C_HandleTypeDef oledI2c;
+	uint8_t SSD1306_Buffer[];
+} SSD1360_d;
+/*
+ * Initalize display and turn it on.
+ */
+SSD1360_d OLED_Init(int width, int height, I2C_HandleTypeDef oledI2c);
+/*
+ *
+ */
+void Empty_Screen(SSD1360_d ssd1360_d);
+void Fill_Screen(SSD1360_d ssd1360_d);
+void DisplayOff(SSD1360_d ssd1360_d);
+void DisplayOn(SSD1360_d ssd1360_d);
+void PrintString(SSD1360_d ssd1360_d, char[] string)
+#endif /* SSD1360_H_ */
