@@ -195,8 +195,7 @@ static uint32_t getADCValue() {
 }
 
 static double getUVValue(uint32_t adcValue) {
-	double dblAdcVal = (double)adcValue;
-	return (dblAdcVal - ZERO_VAL) / DIFF_UV1;
+	return ((double)adcValue - ZERO_VAL) / DIFF_UV1;
 }
 
 static void MX_GPIO_Init(void) {

@@ -10,10 +10,6 @@
 I2C_HandleTypeDef oledI2c;
 ADC_HandleTypeDef hadc1;
 
-static const double ZERO_VAL = 1132;
-static const double TWELVE_VAL = 2978;
-static const double DIFF_UV1 = 144.75;
-
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C3_Init(void);
@@ -193,6 +189,10 @@ static void MX_ADC1_Init(void)
 static uint32_t getADCValue() {
 	return HAL_ADC_GetValue(&hadc1);
 }
+
+static const double ZERO_VAL = 1132;
+static const double TWELVE_VAL = 2978;
+static const double DIFF_UV1 = 144.75;
 
 static double getUVValue(uint32_t adcValue) {
 	double dblAdcVal = (double)adcValue;

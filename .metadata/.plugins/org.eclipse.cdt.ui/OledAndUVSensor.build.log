@@ -1,10 +1,10 @@
-22:16:56 **** Incremental Build of configuration Debug for project OledAndUVSensor ****
+22:35:28 **** Incremental Build of configuration Debug for project OledAndUVSensor ****
 make all 
 Building file: ../Src/main.c
 Invoking: MCU GCC Compiler
 D:\code\githubrepos\nucleo\OledAndUVSensor\Debug
 arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Inc" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Src/main.d" -MT"Src/main.o" -o "Src/main.o" "../Src/main.c"
-../Src/main.c:194:21: warning: 'TWELVE_VAL' defined but not used [-Wunused-const-variable=]
+../Src/main.c:14:21: warning: 'TWELVE_VAL' defined but not used [-Wunused-const-variable=]
  static const double TWELVE_VAL = 2978;
                      ^~~~~~~~~~
 Finished building: ../Src/main.c
@@ -22,5 +22,5 @@ arm-none-eabi-size "OledAndUVSensor.elf"
   25904	    784	   1768	  28456	   6f28	OledAndUVSensor.elf
  
 
-22:16:58 Build Finished (took 1s.445ms)
+22:35:30 Build Finished (took 1s.390ms)
 
