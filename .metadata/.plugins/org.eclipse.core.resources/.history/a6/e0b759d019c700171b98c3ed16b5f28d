@@ -1,0 +1,32 @@
+/*
+ * gps.h
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef GPS_H_
+#define GPS_H_
+#include "stm32l4xx_hal.h"
+
+char[]
+
+struct GPS_Init_d {
+	UART_HandleTypeDef gpsUART;
+};
+
+struct GPS_Data_d {
+	char* latitude;
+	char* longitude;
+	char* date;
+};
+/*
+ * Init struct.
+ */
+struct GPS_Init_d InitGPS(UART_HandleTypeDef gpsUART);
+/*
+ * Get data.
+ */
+struct GPS_Data_d getData(struct GPS_Init_d gps_init_d);
+
+#endif /* GPS_H_ */

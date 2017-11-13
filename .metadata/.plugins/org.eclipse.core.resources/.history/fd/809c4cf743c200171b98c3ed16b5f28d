@@ -1,0 +1,21 @@
+/*
+ * gps.h
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef GPS_H_
+#define GPS_H_
+
+struct GPS_d {
+	float latitude;
+	float longitude;
+	float altitude;
+	char* date;
+	UART_HandleTypeDef gpsUART;
+};
+
+struct SSD1360_d Init(int width, int height, I2C_HandleTypeDef oledI2c, uint8_t addr);
+
+#endif /* GPS_H_ */

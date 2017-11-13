@@ -1,0 +1,24 @@
+23:19:32 **** Incremental Build of configuration Debug for project OledUVSensor ****
+make all 
+Building file: ../Src/stm32l4xx_hal_msp.c
+Invoking: MCU GCC Compiler
+D:\code\githubrepos\nucleo\OledUVSensor\Debug
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"D:/code/githubrepos/nucleo/OledUVSensor/Inc" -I"D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/OledUVSensor/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"D:/code/githubrepos/nucleo/OledUVSensor/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Src/stm32l4xx_hal_msp.d" -MT"Src/stm32l4xx_hal_msp.o" -o "Src/stm32l4xx_hal_msp.o" "../Src/stm32l4xx_hal_msp.c"
+In file included from D:/code/githubrepos/nucleo/OledUVSensor/Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h:238:0,
+                 from D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h:46,
+                 from D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:45,
+                 from ../Src/stm32l4xx_hal_msp.c:222:
+D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:580:1: error: unknown type name 'HAL_StatusTypeDef'
+ HAL_StatusTypeDef HAL_Init(void);
+ ^~~~~~~~~~~~~~~~~
+D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:581:1: error: unknown type name 'HAL_StatusTypeDef'
+ HAL_StatusTypeDef HAL_DeInit(void);
+ ^~~~~~~~~~~~~~~~~
+D:/code/githubrepos/nucleo/OledUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:584:1: error: unknown type name 'HAL_StatusTypeDef'
+ HAL_StatusTypeDef HAL_InitTick (uint32_t TickPriority);
+ ^~~~~~~~~~~~~~~~~
+Src/subdir.mk:30: recipe for target 'Src/stm32l4xx_hal_msp.o' failed
+make: *** [Src/stm32l4xx_hal_msp.o] Error 1
+
+23:19:32 Build Finished (took 447ms)
+

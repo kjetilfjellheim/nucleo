@@ -1,0 +1,17 @@
+/*
+ * gps.c
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "gps.h"
+
+#include "stm32l4xx_hal.h"
+
+
+struct GPS_Init_d Init(UART_HandleTypeDef gpsUART) {
+	struct GPS_Init_d gps = new GPS_Init_d();
+	gps.gpsUART = gpsUART;
+	return gps;
+}

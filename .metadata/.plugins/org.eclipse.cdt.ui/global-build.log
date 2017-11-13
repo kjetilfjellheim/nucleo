@@ -1,20 +1,23 @@
-15:15:17 **** Incremental Build of configuration Debug for project GPSOledProject ****
+22:16:56 **** Incremental Build of configuration Debug for project OledAndUVSensor ****
 make all 
 Building file: ../Src/main.c
 Invoking: MCU GCC Compiler
-D:\code\githubrepos\nucleo\GPSOledProject\Debug
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"D:/code/githubrepos/nucleo/GPSOledProject/Inc" -I"D:/code/githubrepos/nucleo/GPSOledProject/Drivers/STM32L4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/GPSOledProject/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/GPSOledProject/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"D:/code/githubrepos/nucleo/GPSOledProject/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Src/main.d" -MT"Src/main.o" -o "Src/main.o" "../Src/main.c"
+D:\code\githubrepos\nucleo\OledAndUVSensor\Debug
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Inc" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"D:/code/githubrepos/nucleo/OledAndUVSensor/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Src/main.d" -MT"Src/main.o" -o "Src/main.o" "../Src/main.c"
+../Src/main.c:194:21: warning: 'TWELVE_VAL' defined but not used [-Wunused-const-variable=]
+ static const double TWELVE_VAL = 2978;
+                     ^~~~~~~~~~
 Finished building: ../Src/main.c
  
-Building target: GPSOledProject.elf
+Building target: OledAndUVSensor.elf
 Invoking: MCU GCC Linker
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32L432KCUx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "GPSOledProject.elf" @"objects.list"   -lm
-Finished building target: GPSOledProject.elf
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -u _printf_float -T"../STM32L432KCUx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "OledAndUVSensor.elf" @"objects.list"   -lm
+Finished building target: OledAndUVSensor.elf
  
 C:/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/make/make --no-print-directory post-build
 Generating binary and Printing size information:
-arm-none-eabi-objcopy -O binary "GPSOledProject.elf" "GPSOledProject.bin"
-arm-none-eabi-size "GPSOledProject.elf"
+arm-none-eabi-objcopy -O binary "OledAndUVSensor.elf" "OledAndUVSensor.bin"
+arm-none-eabi-size "OledAndUVSensor.elf"
    text	   data	    bss	    dec	    hex	filename
-  14280	    416	   1784	  16480	   4060	GPSOledProject.elf
+  25904	    784	   1768	  28456	   6f28	OledAndUVSensor.elf
  

@@ -350,3 +350,93 @@ java.lang.Exception: localhost:3333: Systemet prøvde å slå sammen en stasjon 
 
 !ENTRY org.eclipse.cdt.core 1 0 2017-11-05 01:04:38.343
 !MESSAGE Indexed 'GPSOledProject2' (23 sources, 87 headers) in 1.76 sec: 9,094 declarations; 40,424 references; 0 unresolved inclusions; 75 syntax errors; 54 unresolved names (0.11%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 20:05:39.278
+!MESSAGE Indexed 'test' (22 sources, 86 headers) in 1.6 sec: 8,875 declarations; 37,294 references; 0 unresolved inclusions; 75 syntax errors; 54 unresolved names (0.12%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 22:40:29.662
+!MESSAGE Indexed 'OledUVSensor' (25 sources, 91 headers) in 1.6 sec: 9,500 declarations; 41,204 references; 0 unresolved inclusions; 76 syntax errors; 54 unresolved names (0.11%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 22:44:36.115
+!MESSAGE Indexed 'test' (22 sources, 66 headers) in 1.07 sec: 4,972 declarations; 37,674 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 23:11:49.846
+!MESSAGE Indexed 'test' (22 sources, 30 headers) in 0.957 sec: 3,525 declarations; 31,245 references; 3 unresolved inclusions; 174 syntax errors; 3,532 unresolved names (9.2%)
+
+!ENTRY org.eclipse.core.resources 4 2 2017-11-12 23:13:20.790
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.core.resources".
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+	at org.eclipse.core.internal.resources.Resource.checkExists(Resource.java:335)
+	at org.eclipse.core.internal.resources.Resource.checkAccessible(Resource.java:209)
+	at org.eclipse.core.internal.resources.File.setContents(File.java:336)
+	at org.eclipse.core.internal.resources.File.setContents(File.java:434)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.save(MakefileGenerator.java:858)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.populateSourcesMakefile(MakefileGenerator.java:1215)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.regenerateMakefiles(MakefileGenerator.java:951)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.performMakefileGeneration(CommonBuilder.java:1006)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.performPrebuildGeneration(CommonBuilder.java:873)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:748)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:513)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:459)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:735)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:206)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:246)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:301)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:304)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:360)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:383)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:487)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:406)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:285)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+!SUBENTRY 1 org.eclipse.core.resources 4 368 2017-11-12 23:13:20.790
+!MESSAGE Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+!SUBENTRY 1 org.eclipse.core.resources 4 368 2017-11-12 23:13:20.790
+!MESSAGE Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+
+!ENTRY org.eclipse.core.resources 4 75 2017-11-12 23:13:20.819
+!MESSAGE Errors occurred during the build.
+!SUBENTRY 1 org.eclipse.cdt.managedbuilder.core 4 75 2017-11-12 23:13:20.819
+!MESSAGE Errors running builder 'CDT Builder' on project 'OledUVSensor'.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+	at org.eclipse.core.internal.resources.Resource.checkExists(Resource.java:335)
+	at org.eclipse.core.internal.resources.Resource.checkAccessible(Resource.java:209)
+	at org.eclipse.core.internal.resources.File.setContents(File.java:336)
+	at org.eclipse.core.internal.resources.File.setContents(File.java:434)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.save(MakefileGenerator.java:858)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.populateSourcesMakefile(MakefileGenerator.java:1215)
+	at fr.ac6.mcu.ide.process.makefile.MakefileGenerator.regenerateMakefiles(MakefileGenerator.java:951)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.performMakefileGeneration(CommonBuilder.java:1006)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.performPrebuildGeneration(CommonBuilder.java:873)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:748)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:513)
+	at org.eclipse.cdt.managedbuilder.internal.core.CommonBuilder.build(CommonBuilder.java:459)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:735)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:206)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:246)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:301)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:304)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:360)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:383)
+	at org.eclipse.core.internal.resources.Workspace.buildInternal(Workspace.java:487)
+	at org.eclipse.core.internal.resources.Workspace.build(Workspace.java:406)
+	at org.eclipse.ui.actions.BuildAction$1.runInWorkspace(BuildAction.java:285)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+!SUBENTRY 2 org.eclipse.core.resources 4 368 2017-11-12 23:13:20.819
+!MESSAGE Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+!SUBENTRY 1 org.eclipse.core.resources 4 368 2017-11-12 23:13:20.819
+!MESSAGE Resource '/OledUVSensor/Debug/sources.mk' does not exist.
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 23:21:45.540
+!MESSAGE Indexed 'OledUVSensor2' (26 sources, 93 headers) in 1.21 sec: 10,045 declarations; 44,094 references; 0 unresolved inclusions; 76 syntax errors; 54 unresolved names (0.1%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-12 23:23:23.969
+!MESSAGE Indexed 'OledAndUVSensor' (22 sources, 73 headers) in 1.29 sec: 7,910 declarations; 37,146 references; 3 unresolved inclusions; 274 syntax errors; 4,141 unresolved names (8.4%)

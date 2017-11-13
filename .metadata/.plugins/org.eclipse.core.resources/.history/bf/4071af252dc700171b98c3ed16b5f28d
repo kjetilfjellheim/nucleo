@@ -1,0 +1,45 @@
+/*
+ * gps.c
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "gps.h"
+#include <string.h>
+
+#include "stm32l4xx_hal.h"
+#include "stm32l4xx_hal_uart.h"
+
+struct GPS_Init_d InitGPS(UART_HandleTypeDef gpsUART) {
+	struct GPS_Init_d gps;
+	gps.gpsUART = gpsUART;
+	HAL_UART_Transmit(&gpsUART, "m\r3\r5\r\r\r\r\rW\r", 12, 100);
+	return gps;
+}
+
+struct GPS_Data_d getData(struct GPS_Init_d gps_init_d) {
+	char gpsstr[200] = "";
+	struct GPS_Data_d gpsdata;
+	gpsdata.latitude = "76.2";
+	gpsdata.longitude = "77.4";
+	gpsdata.date = "2017-01-01T12:00:00";
+	return gpsdata;
+}
+
+
+
+char* readString(struct GPS_Init_d gps_init_d) {
+	char* str[100];
+	memset(str, 0, 100);
+	int chrCount = 0;
+	do {
+		char* charStr = "\0\0";
+		UART_HandleTypeDef gpsUART = gps_init_d.gpsUART;
+		HAL_UART_Receive(&gpsUART, charStr, 1, 100);
+		str[chrCount] = chr;
+	} while(chr != '\r')
+	UART_HandleTypeDef uartHandle = gps_init_d.gpsUART;
+
+	return str;
+}

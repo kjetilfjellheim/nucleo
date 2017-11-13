@@ -1,0 +1,15 @@
+23:04:59 **** Incremental Build of configuration Debug for project test ****
+make all 
+Building file: D:/code/githubrepos/nucleo/test/test/Src/main.c
+Invoking: MCU GCC Compiler
+D:\code\githubrepos\nucleo\test\test\SW4STM32\test\Debug
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"D:/code/githubrepos/nucleo/test/test/Inc" -I"D:/code/githubrepos/nucleo/test/test/Drivers/STM32L4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/test/test/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/test/test/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"D:/code/githubrepos/nucleo/test/test/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Application/User/main.d" -MT"Application/User/main.o" -o "Application/User/main.o" "D:/code/githubrepos/nucleo/test/test/Src/main.c"
+D:/code/githubrepos/nucleo/test/test/Src/main.c:4:21: fatal error: ssd1360.h: No such file or directory
+ #include "ssd1360.h"
+                     ^
+compilation terminated.
+Application/User/subdir.mk:27: recipe for target 'Application/User/main.o' failed
+make: *** [Application/User/main.o] Error 1
+
+23:04:59 Build Finished (took 446ms)
+

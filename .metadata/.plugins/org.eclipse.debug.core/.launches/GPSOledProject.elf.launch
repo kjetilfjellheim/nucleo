@@ -2,11 +2,11 @@
 <launchConfiguration type="org.eclipse.cdt.launch.applicationLaunchType">
 <stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value=""/>
 <stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_START_MODE" value="run"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/GPSOledProject.elf"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="GPSOledProject"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug\OledUVSensor2.elf"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="OledUVSensor2"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1835326965"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/GPSOledProject"/>
+<listEntry value="/OledUVSensor2"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>

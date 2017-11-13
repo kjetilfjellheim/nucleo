@@ -1,0 +1,32 @@
+/*
+ * gps.c
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "gps.h"
+
+#include <string.h>
+#include <stdlib.h>
+
+#include "stm32l4xx_hal.h"
+#include "stm32l4xx_hal_uart.h"
+
+static unsigned char* buffer;
+
+static const unsigned char* CMD_INIT[11] = { 0xB5, 0x62, 0x0A, 0x04, 0x00, 0x00, 0x0E, 0x34 };
+
+struct GPS_Init_d InitGPS(UART_HandleTypeDef gpsUART) {
+	struct GPS_Init_d gps;
+	buffer = malloc(sizeof(unsigned char) * 1000);
+	gps.gpsUART = gpsUART;
+	return gps;
+}
+
+unsigned char* getVersion(struct GPS_Init_d gps_init_d) {
+	UART_HandleTypeDef gpsUART = gps_init_d.gpsUART;
+	HAL_UART_Receive(&gpsUART, buffer, 1000, 1000);
+	return str;
+}
+

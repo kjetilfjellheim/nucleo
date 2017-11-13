@@ -1,0 +1,9 @@
+/*
+ * gps.c
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "gps.h"
+

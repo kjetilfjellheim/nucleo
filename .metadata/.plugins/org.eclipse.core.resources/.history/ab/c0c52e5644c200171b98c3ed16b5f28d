@@ -1,0 +1,31 @@
+/*
+ * gps.h
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef GPS_H_
+#define GPS_H_
+
+struct GPS_d {
+	float latitude;
+	float longitude;
+	float altitude;
+	char* date;
+	UART_HandleTypeDef gpsUART;
+};
+/*
+ * Init struct.
+ */
+struct GPS_d Init(UART_HandleTypeDef gpsUART);
+/*
+ * Initalize display.
+ */
+void GPS_Init(struct GPS_d gps_d);
+/*
+ *
+ */
+GPS_d getData(struct GPS_d gps_d);
+
+#endif /* GPS_H_ */

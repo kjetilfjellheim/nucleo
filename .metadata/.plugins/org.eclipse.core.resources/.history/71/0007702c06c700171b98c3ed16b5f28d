@@ -1,0 +1,25 @@
+/*
+ * gps.c
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#include "gps.h"
+
+#include "stm32l4xx_hal.h"
+
+struct GPS_Init_d InitGPS(UART_HandleTypeDef gpsUART) {
+	struct GPS_Init_d gps;
+	gps.gpsUART = gpsUART;
+	return gps;
+}
+
+struct GPS_Data_d getData(struct GPS_Init_d gps_init_d) {
+	GPS_Data_d gpsdata;
+	gpsdata.latitude = 9.9;
+	gpsdata.longitude = 9.9;
+	gpsdata.altitude = 9.9;
+	gpsdata.date = "2017-01-01T12:00:00";
+	return gpsdata;
+}

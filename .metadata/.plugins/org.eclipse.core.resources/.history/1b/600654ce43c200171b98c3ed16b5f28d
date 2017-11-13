@@ -1,0 +1,15 @@
+/*
+ * gps.h
+ *
+ *  Created on: 5 Nov 2017
+ *      Author: Kjetil
+ */
+
+#ifndef GPS_H_
+#define GPS_H_
+
+struct GPS {
+
+};
+
+#endif /* GPS_H_ */
