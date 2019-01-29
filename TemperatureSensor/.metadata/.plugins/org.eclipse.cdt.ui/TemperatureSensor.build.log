@@ -1,0 +1,23 @@
+00:47:51 **** Incremental Build of configuration Debug for project TemperatureSensor ****
+make all 
+Building file: ../Src/main.c
+Invoking: MCU GCC Compiler
+D:\code\githubrepos\nucleo\TemperatureSensor\TemperatureSensor\Debug
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32F446xx -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Inc" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Drivers/STM32F4xx_HAL_Driver/Inc" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Drivers/CMSIS/Device/ST/STM32F4xx/Include" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Drivers/CMSIS/Include" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Inc" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Middlewares/Third_Party/FreeRTOS/Source/include" -I"D:/code/githubrepos/nucleo/TemperatureSensor/TemperatureSensor/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"Src/main.d" -MT"Src/main.o" -o "Src/main.o" "../Src/main.c"
+Finished building: ../Src/main.c
+ 
+Building target: TemperatureSensor.elf
+Invoking: MCU GCC Linker
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32F446RETx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "TemperatureSensor.elf" @"objects.list"   -lm
+Finished building target: TemperatureSensor.elf
+ 
+C:/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.17.0.201812190825/tools/make/make --no-print-directory post-build
+Generating binary and Printing size information:
+arm-none-eabi-objcopy -O binary "TemperatureSensor.elf" "TemperatureSensor.bin"
+arm-none-eabi-size "TemperatureSensor.elf"
+   text	   data	    bss	    dec	    hex	filename
+  17548	    116	  18524	  36188	   8d5c	TemperatureSensor.elf
+ 
+
+00:47:53 Build Finished (took 2s.192ms)
+

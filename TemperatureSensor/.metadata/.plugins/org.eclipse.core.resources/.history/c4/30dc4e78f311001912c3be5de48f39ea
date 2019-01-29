@@ -1,0 +1,20 @@
+/*
+ * types.h
+ *
+ *  Created on: 6 Jan 2019
+ *      Author: Kjetil
+ */
+
+#ifndef TYPES_H_
+#define TYPES_H_
+
+typedef struct {
+	uint8_t width;
+	uint8_t height;
+	uint8_t inverted;
+	uint8_t initialized;
+	uint8_t ssd1306Buffer[];
+	I2C_HandleTypeDef ssd1306;
+} SSD1306_t;
+
+#endif /* TYPES_H_ */

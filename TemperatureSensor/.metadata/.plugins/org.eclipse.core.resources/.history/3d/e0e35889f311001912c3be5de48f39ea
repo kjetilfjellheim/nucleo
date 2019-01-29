@@ -1,0 +1,7 @@
+
+#ifndef SSD1306_H_
+#define SSD1306_H_
+
+void Init(SSD1306_t ssd1306);
+
+#endif
