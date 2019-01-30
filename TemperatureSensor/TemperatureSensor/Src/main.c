@@ -1,4 +1,3 @@
-
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_adc.h"
@@ -7,9 +6,31 @@
 ADC_HandleTypeDef hadc1;
 I2C_HandleTypeDef hi2c2;
 
-const uint8_t FONT_T[] = { 0x00, 0x06, 0x06, 0x7E, 0x7E, 0x06, 0x06, 0x00 };
-const uint8_t FONT_E[] = { 0x00, 0x7E, 0x7E, 0x5A, 0x5A, 0x42, 0x42, 0x00 };
+const uint8_t FONT_DOT[] = { 0x00, 0x60, 0x60, 0x00 };
+const uint8_t FONT_PLUS[] = { 0x00, 0x10, 0x38, 0x10, 0x00 };
+const uint8_t FONT_MINUS[] = { 0x00, 0x10, 0x10, 0x10, 0x00 };
+const uint8_t FONT_ZERO[] = { 0x00, 0x3C, 0x42, 0x42, 0x3C, 0x00 };
+const uint8_t FONT_ONE[] = { 0x00, 0x04, 0x7E, 0x00 };
+const uint8_t FONT_TWO[] = { 0x00, 0x44, 0x62, 0x50, 0x4C, 0x00 };
+const uint8_t FONT_THREE[] = { 0x00, 0x4A, 0x4A, 0x7E, 0x00 };
+const uint8_t FONT_FOUR[] = { 0x00, 0x0E, 0x08, 0x08, 0x7E, 0x00 };
+const uint8_t FONT_FIVE[] = { 0x00, 0x4E, 0x4A, 0x4A, 0x32, 0x00 };
+const uint8_t FONT_SIX[] = { 0x00, 0x3C, 0x52, 0x52, 0x34, 0x00 };
+const uint8_t FONT_SEVEN[] = { 0x00, 0x62, 0x12, 0x0A, 0x06, 0x00 };
+const uint8_t FONT_EIGHT[] = { 0x00, 0x7E, 0x4A, 0x4A, 0x7E, 0x00 };
+const uint8_t FONT_NINE[] = { 0x00, 0x4E, 0x4A, 0x4A, 0x7E, 0x00 };
+const uint8_t FONT_A[] = { 0x00, 0x7E, 0x12, 0x12, 0x12, 0x12, 0x7E, 0x00 };
+const uint8_t FONT_E[] = { 0x00, 0x7E, 0x4A, 0x4A, 0x42, 0x42, 0x00 };
+const uint8_t FONT_M[] = { 0x00, 0x7E, 0x04, 0x18, 0x18, 0x04, 0x7E, 0x00 };
+const uint8_t FONT_P[] = { 0x00, 0x7E, 0x0A, 0x0A, 0x0A, 0x0A, 0x0E, 0x00 };
+const uint8_t FONT_R[] = { 0x00, 0x7E, 0x0A, 0x0A, 0x1A, 0x2A, 0x4E, 0x00 };
+const uint8_t FONT_T[] = { 0x00, 0x02, 0x02, 0x7E, 0x02, 0x02, 0x00 };
+const uint8_t FONT_U[] = { 0x00, 0x7E, 0x40, 0x40, 0x40, 0x40, 0x7E, 0x00 };
 
+typedef struct font_t {
+	uint8_t* data;
+	uint8_t size_t;
+} Font;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -17,15 +38,17 @@ static void MX_I2C2_Init(void);
 static void MX_ADC1_Init(void);
 
 void Init_OLED(I2C_HandleTypeDef i2cHandle, uint8_t addr);
-void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr,
-		uint8_t reg, uint8_t data);
+void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr, uint8_t reg,
+		uint8_t data);
 void SSD1306_UpdateScreen(I2C_HandleTypeDef i2cHandle, uint8_t addr);
 void SSD1306_Fill();
+Font getCharacter(char chr);
+void writeLine(char* str, int line, int padPixels);
 
 #define SSD1306_WIDTH 128
 #define SSD1306_HEIGHT 64
 
-static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 
 int main(void) {
 	HAL_Init();
@@ -33,28 +56,29 @@ int main(void) {
 	MX_GPIO_Init();
 	MX_I2C2_Init();
 	MX_ADC1_Init();
-	Init_OLED(hi2c2, (uint16_t)(0x3c<<1));
+	Init_OLED(hi2c2, (uint16_t) (0x3c << 1));
 	SSD1306_Fill();
-	SSD1306_UpdateScreen(hi2c2, (uint16_t)(0x3c<<1));
+	SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
 
 	char bufferResult[50];
 	while (1) {
-		SSD1306_UpdateScreen(hi2c2, (uint16_t)(0x3c<<1));
+		SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
 		HAL_ADC_Start(&hadc1);
 		if (HAL_ADC_PollForConversion(&hadc1, 1000000) == HAL_OK) {
 			uint32_t tempADCValue = HAL_ADC_GetValue(&hadc1);
-			float temperature =-150.0+((((float)tempADCValue)-1686.0)/841.0)*100.0;
+			float temperature = -150.0
+					+ ((((float) tempADCValue) - 1686.0) / 841.0) * 100.0;
 			sprintf(bufferResult, "%.1f", temperature);
 		}
 	}
-
 }
 
 void SystemClock_Config(void) {
 
 	RCC_OscInitTypeDef RCC_OscInitStruct;
 	RCC_ClkInitTypeDef RCC_ClkInitStruct;
-	__HAL_RCC_PWR_CLK_ENABLE();
+	__HAL_RCC_PWR_CLK_ENABLE()
+	;
 	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
 	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
 	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
@@ -132,11 +156,16 @@ static void MX_I2C2_Init(void) {
 static void MX_GPIO_Init(void) {
 
 	GPIO_InitTypeDef GPIO_InitStruct;
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOH_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__ADC1_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOH_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOB_CLK_ENABLE()
+	;
+	__ADC1_CLK_ENABLE()
+	;
 
 	/*Configure GPIO pins : PA4 */
 	GPIO_InitStruct.Pin = GPIO_PIN_4;
@@ -185,20 +214,62 @@ void Init_OLED(I2C_HandleTypeDef i2cHandle, uint8_t addr) {
 	SSD1306_I2C_Write(i2cHandle, addr, 0x00, 0xAF); //turn on SSD1306 panel
 }
 
-void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr,
-		uint8_t reg, uint8_t data) {
+void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr, uint8_t reg,
+		uint8_t data) {
 	uint8_t cmd[2] = { reg, data };
 	HAL_I2C_Master_Transmit(&i2cHandle, addr, cmd, 2, 100);
 }
 
 void SSD1306_Fill() {
 	memset(SSD1306_Buffer, 0x00, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
-	for (int i = 0; i < 8; i++) {
-		SSD1306_Buffer[i] = FONT_T[i];
+	writeLine("TEMPERATUR", 0, 0);
+}
+
+void writeLine(char* str, int line, int padPixels) {
+	int currentX = padPixels;
+	for (int chrIx = 0; chrIx < strlen(str); chrIx++) {
+		char chr = str[chrIx];
+		Font data = getCharacter(chr);
+		for (int i = 0; i < data.size_t; i++) {
+			SSD1306_Buffer[currentX + i] = data.data[i];
+		}
+		currentX += data.size_t;
 	}
-	for (int i = 0; i < 8; i++) {
-		SSD1306_Buffer[i+8] = FONT_E[i];
+}
+
+Font getCharacter(char chr) {
+	Font data;
+	switch (chr) {
+	case 'A':
+		data.size_t=sizeof(FONT_A);
+		data.data = FONT_A;
+		break;
+	case 'E':
+		data.size_t=sizeof(FONT_E);
+		data.data = FONT_E;
+		break;
+	case 'M':
+		data.size_t=sizeof(FONT_M);
+		data.data = FONT_M;
+		break;
+	case 'P':
+		data.size_t=sizeof(FONT_P);
+		data.data = FONT_P;
+		break;
+	case 'R':
+		data.size_t=sizeof(FONT_R);
+		data.data = FONT_R;
+		break;
+	case 'T':
+		data.size_t=sizeof(FONT_T);
+		data.data = FONT_T;
+		break;
+	case 'U':
+		data.size_t=sizeof(FONT_U);
+		data.data = FONT_U;
+		break;
 	}
+	return data;
 }
 
 void SSD1306_UpdateScreen(I2C_HandleTypeDef i2cHandle, uint8_t addr) {
@@ -207,7 +278,8 @@ void SSD1306_UpdateScreen(I2C_HandleTypeDef i2cHandle, uint8_t addr) {
 		SSD1306_I2C_Write(i2cHandle, addr, 0x00, 0xb0 + i);
 		SSD1306_I2C_Write(i2cHandle, addr, 0x00, 0x02);
 		SSD1306_I2C_Write(i2cHandle, addr, 0x00, 0x10);
-		HAL_I2C_Mem_Write(&i2cHandle, addr, 0x40, 1, &SSD1306_Buffer[SSD1306_WIDTH * i], SSD1306_WIDTH, 100);
+		HAL_I2C_Mem_Write(&i2cHandle, addr, 0x40, 1,
+				&SSD1306_Buffer[SSD1306_WIDTH * i], SSD1306_WIDTH, 100);
 	}
 }
 
