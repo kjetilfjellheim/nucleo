@@ -41,12 +41,12 @@ void Init_OLED(I2C_HandleTypeDef i2cHandle, uint8_t addr);
 void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr, uint8_t reg,
 		uint8_t data);
 void SSD1306_UpdateScreen(I2C_HandleTypeDef i2cHandle, uint8_t addr);
-void SSD1306_Fill();
 Font getCharacter(char chr);
 void writeLine(char* str, int line, int padPixels);
 
 #define SSD1306_WIDTH 128
 #define SSD1306_HEIGHT 64
+#define PIXELS_PER_LINE 128
 
 uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 
@@ -57,18 +57,21 @@ int main(void) {
 	MX_I2C2_Init();
 	MX_ADC1_Init();
 	Init_OLED(hi2c2, (uint16_t) (0x3c << 1));
-	SSD1306_Fill();
 	SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
 
 	char bufferResult[50];
 	while (1) {
-		SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
 		HAL_ADC_Start(&hadc1);
 		if (HAL_ADC_PollForConversion(&hadc1, 1000000) == HAL_OK) {
+			memset(SSD1306_Buffer, 0x00, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
+			writeLine("TEMPERATUR", 0, 0);
 			uint32_t tempADCValue = HAL_ADC_GetValue(&hadc1);
-			float temperature = -150.0
-					+ ((((float) tempADCValue) - 1686.0) / 841.0) * 100.0;
+			float temperature = -50.0
+					+ ((((float) tempADCValue) - 1755.0) / 841.0) * 100.0;
 			sprintf(bufferResult, "%.1f", temperature);
+			writeLine(bufferResult, 3, 8);
+			SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
+			HAL_Delay(2000);
 		}
 	}
 }
@@ -121,7 +124,7 @@ static void MX_ADC1_Init(void) {
 	hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
 	hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
 	hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-	hadc1.Init.NbrOfConversion = 1;
+	hadc1.Init.NbrOfConversion = 16;
 	hadc1.Init.DMAContinuousRequests = DISABLE;
 	hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
 	if (HAL_ADC_Init(&hadc1) != HAL_OK) {
@@ -178,7 +181,7 @@ static void MX_GPIO_Init(void) {
 	/*Configure GPIO pins : PB3 PB10 */
 	GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_10;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -220,18 +223,13 @@ void SSD1306_I2C_Write(I2C_HandleTypeDef i2cHandle, uint8_t addr, uint8_t reg,
 	HAL_I2C_Master_Transmit(&i2cHandle, addr, cmd, 2, 100);
 }
 
-void SSD1306_Fill() {
-	memset(SSD1306_Buffer, 0x00, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
-	writeLine("TEMPERATUR", 0, 0);
-}
-
 void writeLine(char* str, int line, int padPixels) {
-	int currentX = padPixels;
+	int currentX = padPixels*8;
 	for (int chrIx = 0; chrIx < strlen(str); chrIx++) {
 		char chr = str[chrIx];
 		Font data = getCharacter(chr);
 		for (int i = 0; i < data.size_t; i++) {
-			SSD1306_Buffer[currentX + i] = data.data[i];
+			SSD1306_Buffer[currentX + i + (PIXELS_PER_LINE*line)] = data.data[i];
 		}
 		currentX += data.size_t;
 	}
@@ -240,6 +238,54 @@ void writeLine(char* str, int line, int padPixels) {
 Font getCharacter(char chr) {
 	Font data;
 	switch (chr) {
+	case '-':
+		data.size_t=sizeof(FONT_MINUS);
+		data.data = FONT_MINUS;
+		break;
+	case '.':
+		data.size_t=sizeof(FONT_DOT);
+		data.data = FONT_DOT;
+		break;
+	case '0':
+		data.size_t=sizeof(FONT_ZERO);
+		data.data = FONT_ZERO;
+		break;
+	case '1':
+		data.size_t=sizeof(FONT_ONE);
+		data.data = FONT_ONE;
+		break;
+	case '2':
+		data.size_t=sizeof(FONT_TWO);
+		data.data = FONT_TWO;
+		break;
+	case '3':
+		data.size_t=sizeof(FONT_THREE);
+		data.data = FONT_THREE;
+		break;
+	case '4':
+		data.size_t=sizeof(FONT_FOUR);
+		data.data = FONT_FOUR;
+		break;
+	case '5':
+		data.size_t=sizeof(FONT_FIVE);
+		data.data = FONT_FIVE;
+		break;
+	case '6':
+		data.size_t=sizeof(FONT_SIX);
+		data.data = FONT_SIX;
+		break;
+	case '7':
+		data.size_t=sizeof(FONT_SEVEN);
+		data.data = FONT_SEVEN;
+		break;
+	case '8':
+		data.size_t=sizeof(FONT_EIGHT);
+		data.data = FONT_EIGHT;
+		break;
+	case '9':
+		data.size_t=sizeof(FONT_NINE);
+		data.data = FONT_NINE;
+		break;
 	case 'A':
 		data.size_t=sizeof(FONT_A);
 		data.data = FONT_A;
