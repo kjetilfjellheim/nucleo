@@ -440,3 +440,58 @@ org.eclipse.core.internal.resources.ResourceException: Resource '/OledUVSensor/D
 
 !ENTRY org.eclipse.cdt.core 1 0 2017-11-12 23:23:23.969
 !MESSAGE Indexed 'OledAndUVSensor' (22 sources, 73 headers) in 1.29 sec: 7,910 declarations; 37,146 references; 3 unresolved inclusions; 274 syntax errors; 4,141 unresolved names (8.4%)
+
+!ENTRY org.eclipse.core.resources 4 1 2017-11-19 23:24:00.491
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: File not found: D:\code\githubrepos\nucleo\OledUVSensor2\.project.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.read(FileSystemResourceManager.java:840)
+	at org.eclipse.core.internal.resources.File.getContents(File.java:277)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.descriptionChanged(FileSystemResourceManager.java:387)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.internalWrite(FileSystemResourceManager.java:659)
+	at org.eclipse.core.internal.resources.Project.writeDescription(Project.java:1365)
+	at org.eclipse.core.internal.resources.Project.writeDescription(Project.java:1346)
+	at org.eclipse.core.internal.resources.Resource.deleteResource(Resource.java:862)
+	at org.eclipse.core.internal.resources.ResourceTree.deletedFolder(ResourceTree.java:149)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteFolder(ResourceTree.java:352)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:393)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:850)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1836)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:782)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:318)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:155)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:280)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:280)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:257)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2267)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:305)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:96)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:216)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2267)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:86)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+!SUBENTRY 1 org.eclipse.core.resources 4 368 2017-11-19 23:24:00.493
+!MESSAGE File not found: D:\code\githubrepos\nucleo\OledUVSensor2\.project.
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-19 23:59:21.431
+!MESSAGE Indexed 'WifiTest' (20 sources, 70 headers) in 1.62 sec: 6,936 declarations; 25,109 references; 3 unresolved inclusions; 110 syntax errors; 2,930 unresolved names (8.4%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-20 00:00:46.167
+!MESSAGE Indexed 'WifiTest' (20 sources, 42 headers) in 1.26 sec: 5,835 declarations; 14,743 references; 11 unresolved inclusions; 290 syntax errors; 6,141 unresolved names (23%)
+
+!ENTRY org.eclipse.core.resources 4 368 2017-11-20 00:00:46.836
+!MESSAGE Resource '/WifiTest/src' does not exist.
+
+!ENTRY org.eclipse.core.resources 4 275 2017-11-20 00:00:46.983
+!MESSAGE A resource exists with a different case: '/WifiTest/Inc/stm32f0xx_it.h'.
+
+!ENTRY org.eclipse.core.resources 4 275 2017-11-20 00:00:47.008
+!MESSAGE A resource exists with a different case: '/WifiTest/Src/system_stm32f0xx.c'.
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-20 00:00:49.380
+!MESSAGE Indexed 'WifiTest' (78 sources, 30 headers) in 1.76 sec: 3,959 declarations; 38,133 references; 3 unresolved inclusions; 239 syntax errors; 4,320 unresolved names (9.3%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-11-20 00:02:33.699
+!MESSAGE Indexed 'WifiTest' (20 sources, 85 headers) in 1.47 sec: 7,931 declarations; 29,322 references; 0 unresolved inclusions; 75 syntax errors; 62 unresolved names (0.17%)

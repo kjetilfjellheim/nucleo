@@ -11,7 +11,7 @@ const uint8_t FONT_PLUS[] = { 0x00, 0x10, 0x38, 0x10, 0x00 };
 const uint8_t FONT_MINUS[] = { 0x00, 0x10, 0x10, 0x10, 0x00 };
 const uint8_t FONT_ZERO[] = { 0x00, 0x3C, 0x42, 0x42, 0x3C, 0x00 };
 const uint8_t FONT_ONE[] = { 0x00, 0x04, 0x7E, 0x00 };
-const uint8_t FONT_TWO[] = { 0x00, 0x44, 0x62, 0x50, 0x4C, 0x00 };
+const uint8_t FONT_TWO[] = { 0x00, 0x44, 0x62, 0x50, 0x4E, 0x00 };
 const uint8_t FONT_THREE[] = { 0x00, 0x4A, 0x4A, 0x7E, 0x00 };
 const uint8_t FONT_FOUR[] = { 0x00, 0x0E, 0x08, 0x08, 0x7E, 0x00 };
 const uint8_t FONT_FIVE[] = { 0x00, 0x4E, 0x4A, 0x4A, 0x32, 0x00 };
@@ -66,8 +66,7 @@ int main(void) {
 			memset(SSD1306_Buffer, 0x00, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
 			writeLine("TEMPERATUR", 0, 0);
 			uint32_t tempADCValue = HAL_ADC_GetValue(&hadc1);
-			float temperature = -50.0
-					+ ((((float) tempADCValue) - 1755.0) / 841.0) * 100.0;
+			float temperature = -50.0 + ((((float) tempADCValue) - 1755.0) * 100.0 / 841.0);
 			sprintf(bufferResult, "%.1f", temperature);
 			writeLine(bufferResult, 3, 8);
 			SSD1306_UpdateScreen(hi2c2, (uint16_t) (0x3c << 1));
