@@ -21,9 +21,9 @@ void SetCursor(uint8_t y, uint8_t x);
 void ClearScreen();
 void PrintString(char* str, int len);
 void ResetDisplay();
-float GetVoltage();
 void PrintVoltage(float voltage);
-
+void PrintGauss(int32_t gauss);
+void PrintValues();
 
 int main(void) {
 	HAL_Init();
@@ -37,15 +37,8 @@ int main(void) {
 	ClearScreen();
 	SetCursor(0,0);
 	PrintString("Gaussmeter", 10);
-	SetCursor(1,3);
-	PrintString("3.5 Volt", 8);
-	SetCursor(2,3);
-	PrintString("5.04 Gauss", 10);
-	SetCursor(3,3);
-	PrintString("5.04 mTesla", 11);
 	while (1) {
-		float voltage = GetVoltage();
-		PrintVoltage(voltage);
+		PrintValues();
 		HAL_Delay(1000);
 	}
 }
@@ -118,6 +111,7 @@ static void MX_ADC1_Init(void) {
 	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
 		Error_Handler();
 	}
+	while(HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK);
 
 }
 
@@ -253,21 +247,29 @@ void ResetDisplay() {
 	HAL_Delay(20);
 }
 
-float GetVoltage() {
-	float voltage = 0;
+void PrintValues() {
 	if (HAL_ADC_Start(&hadc1) == HAL_OK) {
 		if (HAL_ADC_PollForConversion(&hadc1, 1000000) == HAL_OK) {
 			uint32_t value = HAL_ADC_GetValue(&hadc1);
-			voltage = value;
+			float voltage = (float)value*3.3/4096;
+			PrintVoltage(voltage);
+			int32_t gauss = -754.44+0.515505437*value;
+			PrintGauss(gauss);
 		}
 	}
-	return voltage;
 }
 
 void PrintVoltage(float voltage) {
 	SetCursor(1,3);
 	char str[16];
-	sprintf(str, "  %1.3f Volt    ", voltage);
+	sprintf(str, "  %1.2f Volt    ", voltage);
+	PrintString(str, 16);
+}
+
+void PrintGauss(int32_t gauss) {
+	SetCursor(2,3);
+	char str[16];
+	sprintf(str, "  %i Gauss      ", gauss);
 	PrintString(str, 16);
 }
 
