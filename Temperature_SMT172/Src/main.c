@@ -1,8 +1,23 @@
 #include "main.h"
+#include <string.h>
+
+#define MEASUREMENTS 100000
 
 #define RS_INS 0x00
 #define RS_DATA 0x40
 #define SPI_COMMAND_SIZE 3
+
+typedef struct
+{
+	uint32_t pulse;
+	uint32_t period;
+} measurement_t;
+
+typedef struct
+{
+	float kelvin;
+	float celsius;
+} temperature_t;
 
 SPI_HandleTypeDef hspi1;
 
@@ -22,6 +37,10 @@ void ClearScreen();
 void PrintString(char* str, int len);
 void ResetDisplay();
 void PrintValues();
+measurement_t ReadPwmValues();
+temperature_t CalculateTemperature(measurement_t);
+void WriteCelsius(float celsius);
+void WriteKelvin(float kelvin);
 
 /**
  * @brief  The application entry point.
@@ -40,12 +59,11 @@ int main(void) {
 	ClearScreen();
 	SetCursor(0, 0);
 	PrintString("Temperatur", 10);
-	SetCursor(1, 0);
-	PrintString("   20C    ", 10);
-	SetCursor(2, 0);
-	PrintString("   273K   ", 10);
 	while (1) {
-
+		measurement_t measurement = ReadPwmValues();
+		temperature_t temperature = CalculateTemperature(measurement);
+		WriteCelsius(temperature.celsius);
+		WriteKelvin(temperature.kelvin);
 	}
 }
 
@@ -124,10 +142,10 @@ static void MX_TIM1_Init(void) {
 	htim1.Instance = TIM1;
 	htim1.Init.Prescaler = 0;
 	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim1.Init.Period = 32768;
+	htim1.Init.Period = 65535;
 	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim1.Init.RepetitionCounter = 0;
-	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	htim1.Init.RepetitionCounter = 0xFFFF;
+	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 	if (HAL_TIM_IC_Init(&htim1) != HAL_OK) {
 		Error_Handler();
 	}
@@ -292,10 +310,42 @@ void ResetDisplay() {
 	HAL_Delay(20);
 }
 
-void PrintValues() {
-	uint32_t period = HAL_TIM_ReadCapturedValue(&htim1, TIM_CHANNEL_1);
-	uint32_t pulse = HAL_TIM_ReadCapturedValue(&htim1, TIM_CHANNEL_2);
+measurement_t ReadPwmValues() {
+	measurement_t totalMeasurement;
+	totalMeasurement.period = 0;
+	totalMeasurement.pulse = 0;
+	for (int x=0;x<MEASUREMENTS;x++) {
+		totalMeasurement.period += HAL_TIM_ReadCapturedValue(&htim1, TIM_CHANNEL_1);
+		totalMeasurement.pulse += HAL_TIM_ReadCapturedValue(&htim1, TIM_CHANNEL_2);
+	}
+	return totalMeasurement;
 }
+
+temperature_t CalculateTemperature(measurement_t measurement) {
+	temperature_t temperature;
+	temperature.celsius = 212.77 * ((double)measurement.pulse/(double)measurement.period) - 68.085;
+	temperature.kelvin = temperature.celsius + 273.15;
+	return temperature;
+}
+
+void WriteCelsius(float celsius) {
+	SetCursor(1, 0);
+	char str[10]="          ";
+	sprintf(str, "%1.4fC", celsius);
+	PrintString("   ", 1);
+	PrintString(str, strlen(str));
+	PrintString("          ", 10 - strlen(str) - 1);
+}
+
+void WriteKelvin(float kelvin) {
+	SetCursor(2, 0);
+	char str[10]="          ";
+	sprintf(str, "%1.4fK", kelvin);
+	PrintString("   ", 1);
+	PrintString(str, strlen(str));
+	PrintString("          ", 10 - strlen(str) - 1);
+}
+
 
 /**
  * @brief  This function is executed in case of error occurrence.
