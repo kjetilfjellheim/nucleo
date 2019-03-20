@@ -323,7 +323,8 @@ measurement_t ReadPwmValues() {
 
 temperature_t CalculateTemperature(measurement_t measurement) {
 	temperature_t temperature;
-	temperature.celsius = 212.77 * ((double)measurement.pulse/(double)measurement.period) - 68.085;
+	double dc = ((double)measurement.pulse/(double)measurement.period);
+	temperature.celsius = -1.43 * dc*dc + 214.56 * dc - 68.6;
 	temperature.kelvin = temperature.celsius + 273.15;
 	return temperature;
 }
@@ -331,7 +332,7 @@ temperature_t CalculateTemperature(measurement_t measurement) {
 void WriteCelsius(float celsius) {
 	SetCursor(1, 0);
 	char str[10]="          ";
-	sprintf(str, "%1.4fC", celsius);
+	sprintf(str, "%1.3fC", celsius);
 	PrintString("   ", 1);
 	PrintString(str, strlen(str));
 	PrintString("          ", 10 - strlen(str) - 1);
@@ -340,7 +341,7 @@ void WriteCelsius(float celsius) {
 void WriteKelvin(float kelvin) {
 	SetCursor(2, 0);
 	char str[10]="          ";
-	sprintf(str, "%1.4fK", kelvin);
+	sprintf(str, "%1.2fK", kelvin);
 	PrintString("   ", 1);
 	PrintString(str, strlen(str));
 	PrintString("          ", 10 - strlen(str) - 1);
